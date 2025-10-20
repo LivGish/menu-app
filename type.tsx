@@ -6,7 +6,7 @@ export type MenuItem = {
 };
 
 export type RootStackParamList = {
-    HomeScreen; undefined;
+    HomeScreen: undefined;
     MenuScreen: {
         items: MenuItem[];
         setItems: React.Dispatch<React.SetStateAction<MenuItem[]>>;

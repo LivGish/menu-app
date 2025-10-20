@@ -140,3 +140,127 @@ function MenuScreen(props: NativeStackScreenProps<RootStackParamList, "MenuScree
 
   );
 }
+
+function HomeScreen(props: NativeStackScreenProps<RootStackParamList, "HomeScreen">) {
+  const [items, setItems] = useState<MenuItem[]>([]);
+
+  const removeItem = (index: number) => {
+    Alert.alert("Remove dish", "Are you sure you want to remove this dish?", [
+      {text: "cancel", style: "cancel"},
+      {text: "Yes", onPress: () => setItems(items.filter((_, i) => i !== index)) },
+    ]);
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.mainTitle}>Menu</Text>
+      <Text style={styles.itemCountText}>
+        {items.length === 0
+        ? "No items on the menu yet."
+        : `You currently have ${items.length} item${items.length > 1 ? "s" : ""} on your menu.`}
+</Text>
+
+      <FlatList
+      data={items}
+      keyExtractor={(_, i) => i.toString()}
+      renderItem={({ item, index }) => (
+        <View style={styles.card}>
+          <View style={styles.cardContent}>
+            <Text style={styles.cardTitle}>{item.dishName}</Text>
+            <Text style={styles.cardDesc}>{item.description}</Text>
+            <Text style={styles.cardPrice}>{item.price}</Text>
+            <TouchableOpacity style={styles.removeButton} onPress={() => removeItem(index)}>
+              <Text style={styles.removeText}>Remove</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+      />
+
+      <TouchableOpacity
+      style={styles.addButton}
+      onPress={() => props.navigation.navigate("MenuScreen", { items, setItems })}
+      >
+        <Text style={styles.addText}>+ Add new item</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+ 
+  container: { flex: 1, backgroundColor: "#f2e9d4", padding: 15 },
+  mainTitle: { fontSize: 28, fontWeight: "800", color: "#571310", textAlign: "center" },
+  itemCountText: { fontSize: 16, color: "#571310", textAlign: "center", marginBottom: 10,},
+  
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 18,
+    marginVertical: 10,
+    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  cardContent: { padding: 15 },
+  cardTitle: { fontSize: 20, fontWeight: "700", color: "#571310" },
+  cardDesc: { color: "#571310", fontSize: 14, marginVertical: 5 },
+  cardPrice: { color: "#571310", fontSize: 13 },
+  removeButton: {
+    backgroundColor: "#a72913",
+    padding: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  removeText: { color: "#fff", fontWeight: "bold" },
+  addButton: {
+    backgroundColor: "#a72913",
+    borderRadius: 30,
+    paddingVertical: 16,
+    alignItems: "center",
+    marginTop: 10,
+    marginBottom: 20,
+    elevation: 4,
+  },
+  addText: { color: "#fff", fontSize: 18, fontWeight: "bold" },
+ 
+  formContainer: { backgroundColor: "#f2e9d4", padding: 20 },
+  formHeader: { fontSize: 24, color: "#571310", fontWeight: "bold", textAlign: "center", marginBottom: 20 },
+  
+  input: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    height: 50,
+    justifyContent: "center",
+    marginVertical: 8,
+  },
+ 
+  pickerWrapper: { marginVertical: 10 },
+  label: { fontSize: 15, fontWeight: "600", color: "#571310", marginBottom: 6, marginLeft: 4 },
+  pickerContainer: {
+    borderWidth: 1,
+    borderRadius: 10,
+    backgroundColor: "#fff",
+    height: 50,
+    justifyContent: "center",
+    overflow: "hidden",
+  },
+  pickerStyle: {
+    height: 50,
+    width: "100%",
+    color: "#571310",
+    fontSize: 15,
+    paddingHorizontal: 10,
+    marginTop: Platform.OS === "ios" ? -6 : -2,
+  },
+ 
+  
+  saveButton: { backgroundColor: "#a72913", padding: 15, borderRadius: 10, marginTop: 15, alignItems: "center" },
+  saveButtonText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
+  cancelButton: { backgroundColor: "#a72913", alignItems: "center", marginTop: 10 },
+  cancelButtonText: { color: "#fff", fontWeight: "bold" },
+});
